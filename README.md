@@ -144,9 +144,9 @@ This is the public demo URL for the status form.
 
 1. Go to [https://share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
 2. New app → repo `sravaniyammanuru/rag_assignment` → main → `streamlit_app.py`.
-3. App settings → Secrets:
+3. App settings → Secrets. Use **TOML** with quotes (not `KEY=value`):
 
-```
+```toml
 GOOGLE_API_KEY = "your_gemini_key"
 PINECONE_API_KEY = "your_pinecone_key"
 PINECONE_INDEX_NAME = "agentic-ai-gemini"

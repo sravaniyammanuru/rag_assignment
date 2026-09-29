@@ -1,6 +1,6 @@
 from langchain_pinecone import PineconeVectorStore
 
-from src.config import PINECONE_INDEX_NAME, TOP_K, require_keys
+from src.config import pinecone_index_name, require_keys, TOP_K
 from src.models import get_embeddings
 
 _vector_store = None
@@ -11,7 +11,7 @@ def get_vector_store():
     if _vector_store is None:
         require_keys()
         _vector_store = PineconeVectorStore(
-            index_name=PINECONE_INDEX_NAME,
+            index_name=pinecone_index_name(),
             embedding=get_embeddings(),
         )
     return _vector_store

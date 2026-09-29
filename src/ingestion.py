@@ -12,10 +12,10 @@ from src.config import (
     EMBED_PAUSE_SECONDS,
     EMBEDDING_DIM,
     PDF_PATH,
-    PINECONE_API_KEY,
-    PINECONE_CLOUD,
-    PINECONE_INDEX_NAME,
-    PINECONE_REGION,
+    pinecone_api_key,
+    pinecone_cloud,
+    pinecone_index_name,
+    pinecone_region,
     require_keys,
 )
 from src.models import get_embeddings
@@ -72,8 +72,9 @@ def _index_ready(desc) -> bool:
     return False
 
 
-def ensure_index(index_name: str = PINECONE_INDEX_NAME):
-    pc = Pinecone(api_key=PINECONE_API_KEY)
+def ensure_index(index_name: str | None = None):
+    index_name = index_name or pinecone_index_name()
+    pc = Pinecone(api_key=pinecone_api_key())
     existing = _index_names(pc)
 
     if index_name in existing:
@@ -93,7 +94,7 @@ def ensure_index(index_name: str = PINECONE_INDEX_NAME):
         name=index_name,
         dimension=EMBEDDING_DIM,
         metric="cosine",
-        spec=ServerlessSpec(cloud=PINECONE_CLOUD, region=PINECONE_REGION),
+        spec=ServerlessSpec(cloud=pinecone_cloud(), region=pinecone_region()),
     )
 
     while True:
@@ -145,7 +146,7 @@ def _embed_with_retries(embedder, texts: list[str]) -> list[list[float]]:
 def run_ingestion(pdf_path: str = PDF_PATH, force: bool = False):
     require_keys()
 
-    index = ensure_index(PINECONE_INDEX_NAME)
+    index = ensure_index(pinecone_index_name())
     stats = index.describe_index_stats()
     if hasattr(stats, "total_vector_count"):
         vector_count = stats.total_vector_count or 0

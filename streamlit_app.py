@@ -1,9 +1,31 @@
+import os
+
 import streamlit as st
+
+st.set_page_config(page_title="Agentic AI eBook Chat", layout="wide")
+
+
+def _apply_cloud_secrets():
+    try:
+        secrets = st.secrets
+    except Exception:
+        return
+
+    def walk(obj):
+        if hasattr(obj, "items"):
+            for key, value in obj.items():
+                if hasattr(value, "items") and not isinstance(value, (str, bytes)):
+                    walk(value)
+                elif value is not None and str(value).strip():
+                    os.environ[str(key)] = str(value).strip().strip('"').strip("'")
+
+    walk(secrets)
+
+
+_apply_cloud_secrets()
 
 from src.graph import rag_graph
 
-
-st.set_page_config(page_title="Agentic AI eBook Chat", layout="wide")
 st.title("Agentic AI eBook chatbot")
 st.caption("Answers are grounded in the PDF. Off-topic questions should get a refusal.")
 
