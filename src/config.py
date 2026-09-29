@@ -4,6 +4,33 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
+
+def _load_streamlit_secrets():
+    # Streamlit Cloud puts keys in st.secrets, not a local .env
+    try:
+        import streamlit as st
+
+        secrets = st.secrets
+    except Exception:
+        return
+    for key in (
+        "GOOGLE_API_KEY",
+        "GEMINI_API_KEY",
+        "PINECONE_API_KEY",
+        "PINECONE_INDEX_NAME",
+        "PINECONE_CLOUD",
+        "PINECONE_REGION",
+    ):
+        try:
+            value = secrets.get(key)
+        except Exception:
+            continue
+        if value and not os.getenv(key):
+            os.environ[key] = str(value)
+
+
+_load_streamlit_secrets()
+
 # Google AI Studio key (https://aistudio.google.com/apikey)
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
 

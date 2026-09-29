@@ -137,3 +137,23 @@ The World Cup one is the sanity check. Retrieval might still return *some* chunk
 - LLM is `gemini-3.5-flash-lite`, embeddings are `gemini-embedding-001` truncated to 768-d.
 - Graph state: `question`, `context`, `answer`, `score` (plus the raw docs for the API).
 - Don't commit `.env`. `.gitignore` already skips it.
+
+## Publish (Streamlit Cloud)
+
+This is the public demo URL for the status form.
+
+1. Go to [https://share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
+2. New app → repo `sravaniyammanuru/rag_assignment` → main → `streamlit_app.py`.
+3. App settings → Secrets:
+
+```
+GOOGLE_API_KEY = "your_gemini_key"
+PINECONE_API_KEY = "your_pinecone_key"
+PINECONE_INDEX_NAME = "agentic-ai-gemini"
+```
+
+4. Deploy. The URL looks like `https://something.streamlit.app`.
+
+Pinecone must already have the eBook vectors (run `python -m src.ingestion` locally once). Cloud only queries the index; it does not re-embed the PDF.
+
+OpenAI API billing is paid. This project uses Gemini (Google AI Studio free quota) for embeddings and chat.
