@@ -32,9 +32,12 @@ class RetrievedChunk(BaseModel):
 
 
 class ChatResponse(BaseModel):
-    answer: str
-    retrieved_chunks: list[RetrievedChunk]
+    query: str
+    final_answer: str
+    retrieved_context_chunks: list[str]
     confidence_score: float
+    # extra detail for debugging; assignment cares about the fields above
+    retrieved_chunks: list[RetrievedChunk]
 
 
 @app.get("/")
@@ -73,9 +76,11 @@ def chat(request: ChatRequest):
         )
 
     return ChatResponse(
-        answer=result["answer"],
-        retrieved_chunks=chunks,
+        query=request.query,
+        final_answer=result["answer"],
+        retrieved_context_chunks=[c.content for c in chunks],
         confidence_score=float(result["score"]),
+        retrieved_chunks=chunks,
     )
 
 

@@ -91,11 +91,13 @@ Response shape:
 
 ```json
 {
-  "answer": "...",
+  "query": "What is Agentic AI?",
+  "final_answer": "...",
+  "retrieved_context_chunks": ["chunk from the PDF..."],
+  "confidence_score": 0.82,
   "retrieved_chunks": [
     {"content": "...", "score": 0.82, "metadata": {"page": 12}}
-  ],
-  "confidence_score": 0.82
+  ]
 }
 ```
 
@@ -121,16 +123,14 @@ If the API is already running:
 python tests_sample_queries.py --api
 ```
 
-Queries baked in:
+Queries baked in (interview-task set):
 
-- What is Agentic AI according to the eBook?
-- How do AI agents differ from traditional automation systems?
-- What are the core components of an Agentic Architecture?
-- What role does memory play in Agentic AI workflows?
-- Who won the 2022 FIFA World Cup?  (should refuse)
-- What evaluation methods are mentioned for agentic systems?
-
-The World Cup one is the sanity check. Retrieval might still return *some* chunks, but generation should not invent a winner.
+- What is the core definition of Agentic AI as outlined in the eBook?
+- What are the main architectural components required to build agentic systems?
+- What real-world industry use cases for Agentic AI are discussed in the eBook?
+- How does Agentic AI differ from traditional generative AI chatbots according to the text?
+- What key challenges or limitations of Agentic AI are mentioned in the document?
+- What is the capital of France?  (should refuse)
 
 ## Notes
 

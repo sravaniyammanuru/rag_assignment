@@ -14,12 +14,12 @@ import argparse
 import sys
 
 SAMPLE_QUERIES = [
-    "What is Agentic AI according to the eBook?",
-    "How do AI agents differ from traditional automation systems?",
-    "What are the core components of an Agentic Architecture?",
-    "What role does memory play in Agentic AI workflows?",
-    "Who won the 2022 FIFA World Cup?",
-    "What evaluation methods are mentioned for agentic systems?",
+    "What is the core definition of Agentic AI as outlined in the eBook?",
+    "What are the main architectural components required to build agentic systems?",
+    "What real-world industry use cases for Agentic AI are discussed in the eBook?",
+    "How does Agentic AI differ from traditional generative AI chatbots according to the text?",
+    "What key challenges or limitations of Agentic AI are mentioned in the document?",
+    "What is the capital of France?",
 ]
 
 
@@ -56,10 +56,12 @@ def run_via_api(query: str, base_url: str) -> dict:
             texts.append(chunk.get("content", ""))
         else:
             texts.append(str(chunk))
+    if not texts:
+        texts = list(payload.get("retrieved_context_chunks") or [])
     return {
-        "answer": payload.get("answer"),
+        "answer": payload.get("final_answer") or payload.get("answer"),
         "confidence_score": payload.get("confidence_score"),
-        "retrieved_chunks": texts,
+        "retrieved_chunks": texts or (payload.get("retrieved_context_chunks") or []),
     }
 
 
